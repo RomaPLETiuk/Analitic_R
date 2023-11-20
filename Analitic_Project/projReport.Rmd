@@ -1,0 +1,720 @@
+---
+title: "Project Report"
+author: "Pletiuk R M"
+date: "2023-11-12"
+
+output: beamer_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Project "CodeCurrencies: Decoding IT Salaries through R Analysis" 
+
+In this project, I aim to analyze the salaries of IT professionals using R software. I will compile and analyze a dataset, visualizing various aspects of salaries through diverse graphs. Additionally, I will calculate descriptive statistics, construct at least 7 simple linear regression models, and build 5 multiple linear regression models to explore relationships between economic variables and IT salaries. Finally, I will create a report in R, presenting the findings and drawing conclusions on the factors influencing IT salaries. 
+
+## Plan:
+
+- Descriptive statistics
+- Plots
+- Pair regression
+- Multiple regression
+
+## Descriptive statistics (part 1)
+
+Descriptive statistics of variables:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, out.width='70%', fig.align='center'}
+library(readxl)
+my_data1 <- read_excel("data.xlsx", col_types = c("skip", 
+    "skip", "skip", "skip", "skip", "numeric", 
+    "skip", "numeric", "skip", "skip", "numeric", 
+    "skip", "skip", "skip"))
+library(dplyr)
+
+summary(my_data1)
+```
+
+## Descriptive statistics (part 2)
+
+Descriptive statistics of variables:
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5, out.width='70%', fig.align='center'}
+library(readxl)
+my_data1 <- read_excel("data.xlsx", col_types = c("skip", 
+    "skip", "skip", "skip", "numeric", "skip", 
+    "skip", "skip", "skip", "skip", "skip", 
+    "numeric", "skip", "numeric"))
+library(dplyr)
+
+summary(my_data1)
+```
+
+## Plot "Average Number of Projects vs Type of Employment"
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+library(ggplot2)
+
+# Ваш код діаграми
+ggplot(my_data, aes(x = Type_of_employment, y = Number_of_projects, fill = Type_of_employment)) +
+  geom_bar(stat = "summary", fun = "mean", position = "dodge") +
+  labs(title = "Average Number of Projects vs Type of Employment",
+       x = "Type of Employment",
+       y = "Average Number of Projects",
+       fill = "Type of Employment") +
+  theme_minimal()
+
+```
+
+
+## Plot "Percentage Distribution of Continent"
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+library(ggplot2)
+
+# Ваш код діаграми
+ggplot(my_data, aes(x = "", fill = Continent)) +
+  geom_bar(width = 1, color = "white", position = "fill") +
+  geom_text(stat = "count", aes(label = scales::percent(..count../sum(..count..))), position = position_fill(vjust = 0.5)) +
+  labs(title = "Percentage Distribution of Continent") +
+  theme_minimal()
+
+```
+
+## Plot "Scatter Plot of Salary vs Age"
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+library(ggplot2)
+
+ggplot(my_data, aes(x = Age, y = Salary, color = Specialization)) +
+  geom_point() +
+  labs(title = "Scatter Plot of Salary vs Age",
+       x = "Age",
+       y = "Salary",
+       color = "Specialization") +
+  theme_minimal()
+
+```
+
+## Plot "Boxplot of Salary by Specialization"
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+library(ggplot2)
+
+ggplot(my_data, aes(x = Specialization, y = Salary, fill = Specialization)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of Salary by Specialization",
+       x = "Specialization",
+       y = "Salary",
+       fill = "Specialization") +
+  theme_minimal()
+
+```
+
+## Plot "Line Plot of Age vs Experience"
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+library(ggplot2)
+
+ggplot(my_data, aes(x = Experience, y = Age, group = 1)) +
+  geom_line(color = "green") +
+  geom_point(color = "green", size = 2) +
+  labs(title = "Line Plot of Age vs Experience",
+       x = "Experience",
+       y = "Age") +
+  theme_minimal()
+
+```
+
+## Plot "Salary by Specialization and Education"
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+library(ggplot2)
+
+ggplot(my_data, aes(x = Specialization, y = Salary, fill = Education)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Grouped Bar Chart of Salary by Specialization and Education",
+       x = "Specialization",
+       y = "Salary",
+       fill = "Education") +
+  theme_minimal()
+
+```
+
+## These are the pairwise regressions
+
+1. Salary ~ Experience
+2. Salary ~ Hour on week
+3. Salary ~ Age
+4. Salary ~ Number of projects
+5. Salary ~ Job satisfaction
+6. Salary ~ Additional profit
+7. Number of projects ~ Experience
+
+##  Linear pair Regression: Experience vs Salary (1)
+
+- Plot Linear pair Regression
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+library(readxl)
+my_data3 <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+library(ggplot2)
+
+# Побудова графіка та лінійної регресії для "Experience" та "Salary"
+regression_plot1 <- ggplot(my_data3, aes(x = Experience, y = Salary)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "Linear Regression: Experience vs Salary",
+       x = "Experience",
+       y = "Salary")
+
+print(regression_plot1)
+
+```
+
+## Linear pair Regression: Experience vs Salary (2)
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=8, fig.height=5}
+library(readxl)
+my_data3 <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model11 <- lm(Salary ~ Experience, data = my_data3)
+
+summary(model11)
+
+ library(broom)
+
+ tidy_model <- tidy(model11)
+ 
+# Вивід рівняння регресії 
+cat("Regression Equation: Salary =", tidy_model$estimate[1],"\n", " + ", tidy_model$estimate[2], " * Experience\n")
+
+```
+
+
+## Linear pair Regression: Number of projects vs Experience (1)
+
+- Plot Linear pair Regression
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+library(readxl)
+my_data3 <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+library(ggplot2)
+
+# Побудова графіка та лінійної регресії для "Experience" та "Salary"
+regression_plot7 <- ggplot(my_data3, aes(x = Experience, y = Number_of_projects)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "green") +
+  labs(title = "Linear Regression: Experience vs Number_of_projects",
+       x = "Experience",
+       y = "Number_of_projects")
+
+print(regression_plot7)
+
+```
+
+## Linear pair Regression: Number of projects vs Experience (2)
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, results='asis', fig.width=8, fig.height=5}
+library(readxl)
+my_data3 <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+madel71 <- lm(Number_of_projects ~ Experience, data = my_data3)
+
+
+summary(madel71)
+
+ library(broom)
+
+ tidy_model <- tidy(madel71)
+ 
+# Вивід рівняння регресії 
+cat("Regression Equation: Number_of_projects =", tidy_model$estimate[1],"\n", " + ", tidy_model$estimate[2], " * Experience\n")
+
+```
+
+
+## Other pairwise regressions
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE ,   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+model21 <- lm(Salary ~ Hour_on_week, data = my_data)
+model31 <- lm(Salary ~ Age, data = my_data)
+model41 <- lm(Salary ~ Number_of_projects, data = my_data)
+model51 <- lm(Salary ~ Job_satisfaction, data = my_data)
+model61 <- lm(Salary ~ Additional_profit, data = my_data)
+
+ library(broom)
+
+tidy_model2 <- tidy(model21) 
+tidy_model3 <- tidy(model31) 
+tidy_model4 <- tidy(model41) 
+tidy_model5 <- tidy(model51) 
+tidy_model6 <- tidy(model61) 
+
+# Вивід рівняння регресії 
+cat("Regression Equation: \n")
+cat(">Salary vs Hour on week: Salary =", tidy_model2$estimate[1], " + \n", tidy_model2$estimate[2], " * Hour_on_week\n")
+cat(">Salary vs Age: Salary =", tidy_model3$estimate[1], " + ", tidy_model3$estimate[2], " * Age\n")
+cat(">Salary vs Number of projects: Salary =", tidy_model4$estimate[1], " + \n", tidy_model4$estimate[2], " * Number_of_projects\n")
+cat(">Salary vs Job satisfaction: Salary =", tidy_model5$estimate[1], " + \n", tidy_model5$estimate[2], " * Job_satisfaction\n")
+cat(">Salary vs AgAdditional profite: Salary =", tidy_model6$estimate[1], " + \n", tidy_model6$estimate[2], " * Additional_profit\n")
+
+
+```
+
+## Other pairwise regressions (1) 
+
+-  Salary ~ Hour_on_week:
+ 
+```{r,  echo=FALSE, message=FALSE, warning=FALSE,  fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+model21 <- lm(Salary ~ Hour_on_week, data = my_data)
+
+summary(model21)$coefficients[, c("Estimate", "Std. Error", "t value", "Pr(>|t|)")]
+ 
+```
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, results='asis',  fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+model21 <- lm(Salary ~ Hour_on_week, data = my_data)
+
+ library(broom)
+tidy_model2 <- tidy(model21) 
+# Вивід рівняння регресії 
+cat("Regression Equation:\n")
+cat("Salary vs Hour on week: Salary =", tidy_model2$estimate[1], " + ", tidy_model2$estimate[2], " * Hour_on_week\n")
+
+```
+
+- Salary ~ Age:
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE,  fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model31 <- lm(Salary ~ Age, data = my_data)
+summary(model31)$coefficients[, c("Estimate", "Std. Error", "t value", "Pr(>|t|)")]
+
+ 
+```
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, results='asis',  fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model31 <- lm(Salary ~ Age, data = my_data)
+
+ library(broom)
+
+tidy_model3 <- tidy(model31) 
+# Вивід рівняння регресії 
+cat("Regression Equation:\n")
+cat("Salary vs Age: Salary =", tidy_model3$estimate[1], " + ", tidy_model3$estimate[2], " * Age\n")
+
+```
+
+## Other pairwise regressions (2) 
+
+- Salary ~ Number of projects
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE ,   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model41 <- lm(Salary ~ Number_of_projects, data = my_data)
+summary(model41)$coefficients[, c("Estimate", "Std. Error", "t value", "Pr(>|t|)")]
+
+```
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE , results='asis',  fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model41 <- lm(Salary ~ Number_of_projects, data = my_data)
+
+ library(broom)
+
+tidy_model4 <- tidy(model41) 
+
+# Вивід рівняння регресії 
+cat("Regression Equation: \n")
+cat(">Salary vs Number of projects: Salary =", tidy_model4$estimate[1], " + \n", tidy_model4$estimate[2], " * Number_of_projects\n")
+
+```
+
+- Salary ~ Job satisfaction
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE ,   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model51 <- lm(Salary ~ Job_satisfaction, data = my_data)
+summary(model51)$coefficients[, c("Estimate", "Std. Error", "t value", "Pr(>|t|)")]
+ 
+```
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE ,   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model51 <- lm(Salary ~ Job_satisfaction, data = my_data)
+
+ library(broom)
+
+tidy_model5 <- tidy(model51) 
+ 
+# Вивід рівняння регресії 
+cat("Regression Equation: \n")
+cat(">Salary vs Job satisfaction: Salary =", tidy_model5$estimate[1], " + \n", tidy_model5$estimate[2], " * Job_satisfaction\n")
+
+```
+
+
+## Other pairwise regressions (3) 
+
+- Salary ~ Additional profit
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE ,   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model61 <- lm(Salary ~ Additional_profit, data = my_data)
+summary(model61)$coefficients[, c("Estimate", "Std. Error", "t value", "Pr(>|t|)")]
+
+```
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE , results='asis',  fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+model61 <- lm(Salary ~ Additional_profit, data = my_data)
+
+ library(broom)
+
+tidy_model6 <- tidy(model61) 
+
+# Вивід рівняння регресії 
+cat("Regression Equation: \n")
+cat(">Salary vs Additional profit: Salary =", tidy_model6$estimate[1], " + \n", tidy_model6$estimate[2], " * Additional_profit\n")
+
+```
+
+
+
+
+
+## Multiple regressions
+
+-  Salary ~ Experience + Hour_on_week
+-  Salary ~ Experience + Number_of_projects
+-  Salary ~ Experience + Additional_profit
+-  Salary ~ Experience + Job_satisfaction
+-  Salary ~ Hour_on_week + Number_of_projects + Additional_profit + Job_satisfaction
+
+
+
+## Multiple Regression: Experience + Number_of_projects vs Salary (1)
+
+- Plot Multiple  Regression
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE, fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+
+library(ggplot2)
+
+# Побудова графіка та лінійної регресії для "Experience" та "Salary"
+regression_plot1 <- ggplot(my_data, aes(x = Experience, y = Salary)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "Linear Regression: Experience vs Salary",
+       x = "Experience",
+       y = "Salary")
+
+# Побудова графіка та лінійної регресії для "Number_of_projects" та "Salary"
+regression_plot2 <- ggplot(my_data, aes(x = Number_of_projects, y = Salary)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "Linear Regression: Number_of_projects vs Salary",
+       x = "Number_of_projects",
+       y = "Salary")
+
+
+library(gridExtra)
+grid.arrange(regression_plot1, regression_plot2, ncol = 2)
+
+```
+
+
+## Multiple Regression: (2)
+
+```{r,  echo=FALSE, message=FALSE, results='asis', warning=FALSE, fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+madel22 <- lm(Salary ~ Experience + Number_of_projects, data = my_data)
+
+summary(madel22)
+
+ library(broom)
+
+ tidy_model <- tidy(madel22)
+ 
+# Вивід рівняння регресії 
+cat("Regression Equation: Salary =", tidy_model$estimate[1],"\n", 
+    " + ", tidy_model$estimate[2], " * Experience\n",
+    " + ", tidy_model$estimate[3], " * Number_of_projects\n")
+
+```
+
+
+
+
+
+## Other Multiple Regressions (1)
+
+-  Salary ~ Experience + Hour_on_week:
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE , results='asis',   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+# Побудова множинної лінійної регресійної моделі
+model12 <- lm(Salary ~ Experience + Hour_on_week, data = my_data)
+
+ library(broom)
+
+tidy_model2 <- tidy(model12) 
+
+# Вивід рівняння регресії 
+cat("Regression Equation: Salary =", tidy_model2$estimate[1],"\n", 
+    " + ", tidy_model$estimate[2], " * Experience\n",
+    " + ", tidy_model$estimate[3], " * Hour_on_week\n")
+
+```
+
+-  Salary ~ Experience + Additional_profit
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE , results='asis',   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+# Побудова множинної лінійної регресійної моделі
+model32 <- lm(Salary ~ Experience + Additional_profit, data = my_data)
+
+ library(broom)
+
+tidy_model3 <- tidy(model32) 
+
+# Вивід рівняння регресії 
+cat("Regression Equation: Salary =", tidy_model3$estimate[1],"\n", 
+    " + ", tidy_model$estimate[2], " * Experience\n",
+    " + ", tidy_model$estimate[3], " * Additional_profit\n")
+```
+
+
+## Other Multiple Regressions (2)
+
+-  Salary ~ Experience + Job_satisfaction
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE , results='asis',   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+# Побудова множинної лінійної регресійної моделі
+model42 <- lm(Salary ~ Experience + Job_satisfaction, data = my_data)
+
+ library(broom)
+
+tidy_model4 <- tidy(model42) 
+
+# Вивід рівняння регресії 
+cat("Regression Equation: Salary =", tidy_model3$estimate[1],"\n", 
+    " + ", tidy_model$estimate[2], " * Experience\n",
+    " + ", tidy_model$estimate[3], " * Job_satisfaction\n")
+```
+
+
+
+
+## Other Multiple Regressions (3)
+
+-  Salary ~ Hour_on_week + Number_of_projects + Additional_profit + Job_satisfaction
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE ,    fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+# Побудова множинної лінійної регресійної моделі
+model52 <- lm(Salary ~ Hour_on_week + Number_of_projects + Additional_profit + Job_satisfaction, data = my_data)
+summary(model52)$coefficients[, c("Estimate", "Std. Error", "t value", "Pr(>|t|)")]
+      
+```
+
+```{r,  echo=FALSE, message=FALSE, warning=FALSE , results='asis',   fig.width=8, fig.height=5}
+library(readxl)
+my_data <- read_excel("data.xlsx", col_types = c("numeric", 
+    "text", "text", "text", "numeric", "numeric", 
+    "text", "numeric", "text", "text", "numeric", 
+    "numeric", "numeric", "numeric"))
+
+# Побудова множинної лінійної регресійної моделі
+model52 <- lm(Salary ~ Hour_on_week + Number_of_projects + Additional_profit + Job_satisfaction, data = my_data)
+
+
+ library(broom)
+tidy_model5 <- tidy(model52) 
+ 
+# Вивід рівняння регресії 
+cat("Regression Equation: Salary =", tidy_model5$estimate[1],"\n", 
+    " + ", tidy_model5$estimate[2], " * Hour_on_week\n",
+    " + ", tidy_model5$estimate[3], " * Number_of_projects\n",
+    " + ", tidy_model5$estimate[4], " * Additional_profit\n",
+    " + ", tidy_model5$estimate[5], " * Job_satisfaction\n")
+      
+```
+
+
+
+
+
+## Conclusion
+
+### Insights and Trends
+
+The analysis revealed key insights into IT salaries, showcasing trends through descriptive statistics and diverse visualizations.
+
+### Regression Models
+
+Constructed simple and multiple linear regression models provided a deeper understanding of the impact of economic variables on IT salaries, offering valuable predictive capabilities.
+
+### Future Considerations
+
+These findings have implications for strategic HR decisions, and future research could explore industry-specific nuances for a more nuanced perspective.
